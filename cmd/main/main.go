@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"balatro-deck-calculator/deck"
+	"github.com/goughjames45/balatro-deck-calculator/deck"
 )
 
 func main() {
