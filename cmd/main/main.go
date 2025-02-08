@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/goughjames45/balatro-deck-calculator/deck"
+	deckBuilder "github.com/goughjames45/balatro-deck-calculator/deck"
 )
 
 func main() {
-	message := deck.Hello("Gladys")
-	fmt.Println(message)
+	deck := deckBuilder.NewStandardDeck()
+	fmt.Printf("%+v", deck)
 }
