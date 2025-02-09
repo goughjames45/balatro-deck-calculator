@@ -2,7 +2,9 @@ package deck
 
 import (
 	"math/big"
+	"math/rand"
 	"fmt"
+	"time"
 )
 
 type Deck struct {
@@ -29,17 +31,52 @@ func NewStandardDeck() *Deck {
 	return &Deck{Cards: deck}
 }
 
+func (d Deck) Shuffle() {
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(d.Cards), func(i, j int) {
+		d.Cards[i], d.Cards[j] = d.Cards[j], d.Cards[i]
+	})
+}
+
+func (d Deck) DealHand(handSize int) []Card {
+	var hand []Card
+
+	for i:=0; i < handSize; i++ {
+		hand = append(hand, d.Cards[i])
+	}
+
+	return hand
+
+}
+
+func SimulateStraightFlushProbability(handSize int) float64 {
+	n := 10000000
+	count := 0
+
+	for i := 0; i <= n; i++ {
+		deck := NewStandardDeck()
+		deck.Shuffle()
+		hand := deck.DealHand(handSize)
+		
+		if ContainsStraightFlush(hand) {
+			count++
+		}
+	}
+
+	return float64(count) / float64(n)
+
+}
+
 func CalculateStraightFlushProbability(deck *Deck, handSize int) float64 {
 
 	totalHands := new(big.Float).SetInt(NChooseK(len(deck.Cards), handSize))
-	totalStraightFlushes := new(big.Float).SetInt(CountStraightFlushes(deck))
+	totalStraightFlushes := float64(GenerateHands(deck, handSize))
+	fmt.Printf("%v \n", totalStraightFlushes)
 
 	fHands, _ := totalHands.Float64()
-	fmt.Println(fHands)
-	fFlushes, _ := totalStraightFlushes.Float64()
-	fmt.Println(fFlushes)
+	fmt.Printf("%v \n", fHands)
 
-	return fFlushes / fHands
+	return totalStraightFlushes / fHands
 }
 
 // NChooseK calculates the binomial coefficient (n choose k)
@@ -61,6 +98,71 @@ func Factorial(n int) *big.Int {
 		result.Mul(result, x)
 	}
 	return result
+}
+
+func GenerateHands(deck *Deck, handSize int) int {
+	count := int64(4 * (10 - (handSize-5)))
+
+	// var generate func(start int, hand []Card)
+	// generate = func(start int, hand []Card) {
+	// 	if len(hand) == handSize {
+	// 		if ContainsStraightFlush(hand) {
+	// 			count += 1
+	// 		}
+	// 		return
+	// 	}
+	// 	for i := start; i < len(deck.Cards); i++ {
+	// 		generate(i+1, append(hand, deck.Cards[i]))
+	// 	}
+	// }
+	// generate(0, []Card{})
+	return int(count)
+}
+
+func ContainsStraightFlush(hand []Card) bool {
+	for _, suit := range suits {
+		for i := 0; i <= 8; i++ {
+			hasStraightFlush := true
+			for j := 0; j < 5; j++ {
+				card := Card{Rank: ranks[i+j], Suit: suit}
+				found := false
+				for _, c := range hand {
+					if c == card {
+						found = true
+						break
+					}
+				}
+				if !found {
+					hasStraightFlush = false
+					break
+				}
+			}
+			if hasStraightFlush {
+				return true
+			}
+		}
+		// Check for A-2-3-4-5 straight flush
+		aceLowStraight := []string{"A", "2", "3", "4", "5"}
+		hasAceLowStraightFlush := true
+		for _, rank := range aceLowStraight {
+			card := Card{Rank: rank, Suit: suit}
+			found := false
+			for _, c := range hand {
+				if c == card {
+					found = true
+					break
+				}
+			}
+			if !found {
+				hasAceLowStraightFlush = false
+				break
+			}
+		}
+		if hasAceLowStraightFlush {
+			return true
+		}
+	}
+	return false
 }
 
 func CountStraightFlushes(deck *Deck) *big.Int {

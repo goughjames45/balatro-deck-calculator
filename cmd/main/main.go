@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
-	deck := deckBuilder.NewStandardDeck()
-	fmt.Printf("%+v", deck)
+	// deck := deckBuilder.NewStandardDeck()
+	fmt.Printf("%+v\n", deckBuilder.SimulateStraightFlushProbability(5))
+	fmt.Printf("%+v\n", deckBuilder.SimulateStraightFlushProbability(8))
 }
