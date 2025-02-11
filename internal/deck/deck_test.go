@@ -29,4 +29,3 @@ func TestNewDeck(t *testing.T) {
 		}
 	}
 }
-

@@ -10,6 +10,6 @@ func main() {
 	// deck := deckBuilder.NewStandardDeck()
 	deck := deckBuilder.NewStandardDeck()
 	simulator := simulation.NewProbabilitySimulation(deck)
-	fmt.Printf("%+v\n", simulator.SimulatePokerHandProbabilities(5, 100000))
-	fmt.Printf("%+v\n", simulator.SimulatePokerHandProbabilities(8,  100000))
+	fmt.Printf("%+v\n", *simulator.SimulatePokerHandProbabilities(5, 100000))
+	fmt.Printf("%+v\n", *simulator.SimulatePokerHandProbabilities(8, 100000))
 }

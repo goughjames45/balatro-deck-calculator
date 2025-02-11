@@ -8,7 +8,7 @@ import (
 type BalatroDeck interface {
 	Shuffle()
 	DealHand(handSize int) []Card
-} 
+}
 
 type Deck struct {
 	Cards []Card
@@ -44,11 +44,10 @@ func (d Deck) Shuffle() {
 func (d Deck) DealHand(handSize int) []Card {
 	var hand []Card
 
-	for i:=0; i < handSize; i++ {
+	for i := 0; i < handSize; i++ {
 		hand = append(hand, d.Cards[i])
 	}
 
 	return hand
 
 }
-

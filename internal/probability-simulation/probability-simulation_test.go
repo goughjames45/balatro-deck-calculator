@@ -1,8 +1,8 @@
 package probabilitySimulation
 
 import (
-	"testing"
 	d "github.com/goughjames45/balatro-deck-calculator/internal/deck"
+	"testing"
 )
 
 // func TestNChooseK(t *testing.T) {
@@ -93,7 +93,7 @@ func TestContainsStraightFlush(t *testing.T) {
 		t.Errorf("Expected hand to contain a straight flush")
 	}
 	handRegular := []d.Card{
-		{"Spades", "8" },
+		{"Spades", "8"},
 		{"Spades", "9"},
 		{"Spades", "10"},
 		{"Spades", "J"},
@@ -104,21 +104,221 @@ func TestContainsStraightFlush(t *testing.T) {
 	}
 
 	handNoStraightFlush := []d.Card{
-		{ "Clubs", "2"},
-		{ "Hearts", "3"},
-		{ "Diamonds", "4"},
-		{ "Spades", "5"},
-		{ "Clubs", "6"},
+		{"Clubs", "2"},
+		{"Hearts", "3"},
+		{"Diamonds", "4"},
+		{"Spades", "5"},
+		{"Clubs", "6"},
 	}
 	if ContainsStraightFlush(handNoStraightFlush) {
 		t.Errorf("Expected hand to NOT contain a straight flush")
 	}
 }
 
+func TestContainsFlush(t *testing.T) {
+	hand := []d.Card{
+		{"Hearts", "A"},
+		{"Hearts", "2"},
+		{"Hearts", "3"},
+		{"Hearts", "4"},
+		{"Hearts", "5"},
+	}
+	if !ContainsFlush(hand) {
+		t.Errorf("Expected hand to contain a flush")
+	}
+
+	handNoFlush := []d.Card{
+		{"Clubs", "2"},
+		{"Hearts", "3"},
+		{"Diamonds", "4"},
+		{"Spades", "5"},
+		{"Clubs", "6"},
+	}
+	if ContainsFlush(handNoFlush) {
+		t.Errorf("Expected hand to NOT contain a flush")
+	}
+}
+
+func TestContainsStraight(t *testing.T) {
+	handWithStraight := []d.Card{
+		{"Hearts", "6"},
+		{"Diamonds", "7"},
+		{"Clubs", "8"},
+		{"Spades", "9"},
+		{"Hearts", "10"},
+	}
+	if !ContainsStraight(handWithStraight) {
+		t.Errorf("Expected hand to contain a straight")
+	}
+
+	handWithoutStraight := []d.Card{
+		{"Hearts", "2"},
+		{"Diamonds", "3"},
+		{"Clubs", "5"},
+		{"Spades", "7"},
+		{"Hearts", "9"},
+	}
+	if ContainsStraight(handWithoutStraight) {
+		t.Errorf("Expected hand to NOT contain a straight")
+	}
+	handWithStraight = []d.Card{
+		{"Hearts", "A"},
+		{"Hearts", "2"},
+		{"Diamonds", "3"},
+		{"Clubs", "4"},
+		{"Spades", "5"},
+	}
+	if !ContainsStraight(handWithStraight) {
+		t.Errorf("Expected hand to contain a straight")
+	}
+	handWithStraight = []d.Card{
+		{"Hearts", "A"},
+		{"Hearts", "2"},
+		{"Diamonds", "3"},
+		{"Clubs", "4"},
+		{"Spades", "5"},
+		{"Spades", "9"},
+		{"Spades", "Q"},
+	}
+	if !ContainsStraight(handWithStraight) {
+		t.Errorf("Expected hand to contain a straight")
+	}
+}
+
+func TestContainsFourOfAKind(t *testing.T) {
+	handWithFour := []d.Card{
+		{"Hearts", "K"},
+		{"Diamonds", "K"},
+		{"Clubs", "K"},
+		{"Spades", "K"},
+		{"Hearts", "7"},
+	}
+	if !ContainsFourOfAKind(handWithFour) {
+		t.Errorf("Expected hand to contain four of a kind")
+	}
+
+	handWithoutFour := []d.Card{
+		{"Hearts", "2"},
+		{"Diamonds", "3"},
+		{"Clubs", "4"},
+		{"Spades", "5"},
+		{"Hearts", "6"},
+	}
+	if ContainsFourOfAKind(handWithoutFour) {
+		t.Errorf("Expected hand to NOT contain four of a kind")
+	}
+}
+
+func TestContainsFullHouse(t *testing.T) {
+	handWithFullHouse := []d.Card{
+		{"Hearts", "Q"},
+		{"Diamonds", "Q"},
+		{"Clubs", "Q"},
+		{"Spades", "8"},
+		{"Hearts", "8"},
+	}
+	if !ContainsFullHouse(handWithFullHouse) {
+		t.Errorf("Expected hand to contain a full house")
+	}
+
+	handWithoutFullHouse := []d.Card{
+		{"Hearts", "2"},
+		{"Diamonds", "3"},
+		{"Clubs", "4"},
+		{"Spades", "5"},
+		{"Hearts", "6"},
+	}
+	if ContainsFullHouse(handWithoutFullHouse) {
+		t.Errorf("Expected hand to NOT contain a full house")
+	}
+}
+
+func TestContainsThreeOfAKind(t *testing.T) {
+	handWithThree := []d.Card{
+		{"Hearts", "K"},
+		{"Diamonds", "K"},
+		{"Clubs", "K"},
+		{"Spades", "Q"},
+		{"Hearts", "7"},
+	}
+	if !ContainsThreeOfAKind(handWithThree) {
+		t.Errorf("Expected hand to contain three of a kind")
+	}
+
+	handWithoutThree := []d.Card{
+		{"Hearts", "2"},
+		{"Diamonds", "3"},
+		{"Clubs", "4"},
+		{"Spades", "5"},
+		{"Hearts", "6"},
+	}
+	if ContainsThreeOfAKind(handWithoutThree) {
+		t.Errorf("Expected hand to NOT contain three of a kind")
+	}
+}
+
+func TestContainsTwoPair(t *testing.T) {
+	handWithTwoPair := []d.Card{
+		{"Hearts", "6"},
+		{"Diamonds", "6"},
+		{"Clubs", "9"},
+		{"Spades", "9"},
+		{"Hearts", "10"},
+	}
+	if !ContainsTwoPair(handWithTwoPair) {
+		t.Errorf("Expected hand to contain two pair")
+	}
+
+	handWithoutTwoPair := []d.Card{
+		{"Hearts", "6"},
+		{"Diamonds", "7"},
+		{"Clubs", "8"},
+		{"Spades", "9"},
+		{"Hearts", "10"},
+	}
+	if ContainsTwoPair(handWithoutTwoPair) {
+		t.Errorf("Expected hand to NOT contain two pair")
+	}
+
+	handWithThreeOfAKind := []d.Card{
+		{"Hearts", "6"},
+		{"Diamonds", "6"},
+		{"Clubs", "6"},
+		{"Spades", "9"},
+		{"Hearts", "9"},
+	}
+	if ContainsTwoPair(handWithThreeOfAKind) {
+		t.Errorf("Expected hand to NOT contain exactly two pair")
+	}
+}
+
+func TestContainsPair(t *testing.T) {
+	handWithPair := []d.Card{
+		{"Hearts", "K"},
+		{"Diamonds", "K"},
+		{"Clubs", "K"},
+		{"Spades", "Q"},
+		{"Hearts", "7"},
+	}
+	if !ContainsPair(handWithPair) {
+		t.Errorf("Expected hand to contain pair")
+	}
+
+	handWithoutPair := []d.Card{
+		{"Hearts", "2"},
+		{"Diamonds", "3"},
+		{"Clubs", "4"},
+		{"Spades", "5"},
+		{"Hearts", "6"},
+	}
+	if ContainsPair(handWithoutPair) {
+		t.Errorf("Expected hand to NOT contain pair")
+	}
+}
 // func TestGenerateHands(t *testing.T) {
 // 	deck := NewStandardDeck()
 // 	hands := GenerateHands(deck, 5)
-// 	if hands != 40 { // 52 choose 5
+// 	if hands != 40 { // 52 choose 4
 // 		t.Errorf("Expected %d hands, got %d", 40, hands)
 // 	}
 // }
