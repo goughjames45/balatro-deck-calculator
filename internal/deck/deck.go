@@ -24,14 +24,33 @@ var Suits = []string{"Hearts", "Diamonds", "Clubs", "Spades"}
 var Ranks = []string{"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"}
 
 // NewDeck creates and returns a new deck of 52 playing cards.
-func NewStandardDeck() *Deck {
+func NewStandardDeck(opts ...func(*Deck)) *Deck {
 	var deck []Card
 	for _, suit := range Suits {
 		for _, rank := range Ranks {
 			deck = append(deck, Card{Suit: suit, Rank: rank})
 		}
 	}
-	return &Deck{Cards: deck}
+
+	dck := &Deck{Cards: deck}
+
+	for _, opt := range opts {
+		opt(dck)
+	}
+
+	return dck
+}
+
+func WithTheHangedMan(card []Card) func(*Deck){
+	return func(d *Deck) {
+		for _, c := range card {
+			for i, other := range d.Cards {
+				if c == other {
+				    d.Cards = append(d.Cards[:i], d.Cards[i+1:]...)
+				}
+			}
+		}
+	}
 }
 
 func (d Deck) Shuffle() {

@@ -17,7 +17,7 @@ type HandAccumulator struct {
 	StraightCount      float64 
 	ThreeOfAKindCount  float64 
 	TwoPairCount       float64 
-	PairCount               float64 
+	PairCount          float64 
 }
 
 func NewProbabilitySimulation(bDeck d.BalatroDeck) *ProbabilitySimulation {
