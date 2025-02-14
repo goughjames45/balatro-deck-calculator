@@ -3,7 +3,59 @@ package probabilitySimulation
 import (
 	d "github.com/goughjames45/balatro-deck-calculator/internal/deck"
 	"testing"
+	"math"
 )
+
+func TestProbabilitySimulation(t *testing.T) {
+	deck := d.NewStandardDeck()
+	sim := NewProbabilitySimulation(deck)
+
+	probs := sim.SimulatePokerHandProbabilities(5, 1000000)
+
+	expectedProbs := HandAccumulator {
+		StraightFlushCount: 0.00154,
+		FourOfAKindCount:   0.02401,
+		FullHouseCount:     0.1441,
+		FlushCount:         0.198044,
+		StraightCount:      0.3925,
+		ThreeOfAKindCount:  2.28091,
+		TwoPairCount:       4.898,
+		PairCount:	    49.2917,
+	}
+
+	if math.Abs(probs.StraightFlushCount - expectedProbs.StraightFlushCount) > 3*0.0004 {
+		t.Errorf("Expected %f, but recieved %f", expectedProbs.StraightFlushCount, probs.StraightFlushCount)
+	}
+
+	if math.Abs(probs.FourOfAKindCount - expectedProbs.FourOfAKindCount) > 3*0.0015 {
+		t.Errorf("Expected %f, but recieved %f", expectedProbs.FourOfAKindCount, probs.FourOfAKindCount)
+	}
+
+	if math.Abs(probs.FullHouseCount - expectedProbs.FullHouseCount) > 3*0.0038 {
+		t.Errorf("Expected %f, but recieved %f", expectedProbs.FullHouseCount, probs.FullHouseCount)
+	}
+
+	if math.Abs(probs.FlushCount - expectedProbs.FlushCount) > 3*0.0044 {
+		t.Errorf("Expected %f, but recieved %f", expectedProbs.FlushCount, probs.FlushCount)
+	}
+
+	if math.Abs(probs.StraightCount - expectedProbs.StraightCount) > 3*0.0063 {
+		t.Errorf("Expected %f, but recieved %f", expectedProbs.StraightCount, probs.StraightCount)
+	}
+	
+	if math.Abs(probs.ThreeOfAKindCount - expectedProbs.ThreeOfAKindCount) > 3*0.0149 {
+		t.Errorf("Expected %f, but recieved %f", expectedProbs.ThreeOfAKindCount, probs.ThreeOfAKindCount)
+	}
+	
+	if math.Abs(probs.TwoPairCount - expectedProbs.TwoPairCount) > 3*0.022 {
+		t.Errorf("Expected %f, but recieved %f", expectedProbs.TwoPairCount, probs.TwoPairCount)
+	}
+
+	if math.Abs(probs.PairCount - expectedProbs.PairCount) > 3*0.05 {
+		t.Errorf("Expected %f, but recieved %f", expectedProbs.PairCount, probs.PairCount)
+	}
+
+}
 
 // func TestNChooseK(t *testing.T) {
 // 	tests := []struct {
@@ -278,17 +330,6 @@ func TestContainsTwoPair(t *testing.T) {
 	}
 	if ContainsTwoPair(handWithoutTwoPair) {
 		t.Errorf("Expected hand to NOT contain two pair")
-	}
-
-	handWithThreeOfAKind := []d.Card{
-		{"Hearts", "6"},
-		{"Diamonds", "6"},
-		{"Clubs", "6"},
-		{"Spades", "9"},
-		{"Hearts", "9"},
-	}
-	if ContainsTwoPair(handWithThreeOfAKind) {
-		t.Errorf("Expected hand to NOT contain exactly two pair")
 	}
 }
 

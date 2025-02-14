@@ -18,7 +18,7 @@ run: build
 
 # Format code
 fmt:
-	go fmt $(GO_FILES)
+	go fmt ./...
 
 # Clean build artifacts
 clean:
@@ -30,7 +30,7 @@ deps:
 
 # Test the application
 test:
-	go test ./...
+	go test -cover ./...
 
 # Show help message
 help:

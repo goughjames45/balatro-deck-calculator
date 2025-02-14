@@ -275,7 +275,7 @@ func ContainsTwoPair(hand []d.Card) bool {
 
 	pairCount := 0
 	for _, count := range rankCount {
-		if count == 2 {
+		if count >= 2 {
 			pairCount++
 		}
 	}
