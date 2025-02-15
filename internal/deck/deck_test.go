@@ -197,6 +197,68 @@ func TestFuncOps(t *testing.T) {
 				"A": 4,
 			},
 		},
+		{
+			name: "With Strength",
+			op: WithStrength(
+				[]Card{
+					{Suit: "Hearts", Rank: "3"},
+					{Suit: "Spades", Rank: "3"},
+				},
+			),
+			expectedDeckSize: 52,
+			expectedSuits: map[string]int {
+				"Hearts": 13,
+				"Spades": 13,
+				"Diamonds": 13,
+				"Clubs": 13,
+			},
+			expectedRanks: map[string]int {
+				"2": 4,
+				"3": 2,
+				"4": 6,
+				"5": 4,
+				"6": 4,
+				"7": 4,
+				"8": 4,
+				"9": 4,
+				"10": 4,
+				"J": 4,
+				"Q": 4,
+				"K": 4,
+				"A": 4,
+			},
+		},
+		{
+			name: "With Death",
+			op: WithDeath(
+				[]Card{
+					{Suit: "Hearts", Rank: "3"},
+					{Suit: "Spades", Rank: "5"},
+				},
+			),
+			expectedDeckSize: 52,
+			expectedSuits: map[string]int {
+				"Hearts": 12,
+				"Spades": 14,
+				"Diamonds": 13,
+				"Clubs": 13,
+			},
+			expectedRanks: map[string]int {
+				"2": 4,
+				"3": 3,
+				"4": 4,
+				"5": 5,
+				"6": 4,
+				"7": 4,
+				"8": 4,
+				"9": 4,
+				"10": 4,
+				"J": 4,
+				"Q": 4,
+				"K": 4,
+				"A": 4,
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

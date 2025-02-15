@@ -3,6 +3,8 @@ package deck
 import (
 	"math/rand"
 	"time"
+	"fmt"
+	"strconv"
 )
 
 type BalatroDeck interface {
@@ -57,11 +59,29 @@ func WithTheHangedMan(card []Card) func(*Deck){
 
 func WithStrength(card []Card) func(*Deck){
 	return func(d *Deck) {
+		for _, c := range card {
+			for i, other := range d.Cards {
+				if c == other {
+					rank, err := strconv.Atoi(c.Rank)
+					if err != nil {
+						fmt.Println("Error:", err)
+						return
+					}
+
+					d.Cards[i] = Card{Suit: c.Suit, Rank: strconv.Itoa(rank+1)}
+				}
+			}
+		}
 	}
 }
 
 func WithDeath(card []Card) func(*Deck){
 	return func(d *Deck) {
+		for i, other := range d.Cards {
+			if card[0] == other {
+				d.Cards[i] = Card{Suit: card[1].Suit, Rank: card[1].Rank}
+			}
+		}
 	}
 }
 
@@ -93,12 +113,9 @@ func switchCardsToSuit(card []Card, d *Deck, suit string) {
 		for _, c := range card {
 			for i, other := range d.Cards {
 				if c == other {
-				    d.Cards = append(d.Cards[:i], d.Cards[i+1:]...)
+					d.Cards[i] = Card{Suit: suit, Rank: c.Rank}
 				}
 			}
-		}
-		for _, c := range card {
-			d.Cards = append(d.Cards, Card{Suit: suit, Rank: c.Rank})
 		}
 }
 
