@@ -30,7 +30,7 @@ deps:
 
 # Test the application
 test:
-	go test -cover ./...
+	go test -v -cover ./...
 
 # Show help message
 help:

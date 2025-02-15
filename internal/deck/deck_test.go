@@ -28,53 +28,206 @@ func TestNewDeck(t *testing.T) {
 			t.Errorf("Expected 4 cards for rank %s, got %d", rank, ranksCount[rank])
 		}
 	}
+}
 
 
-	removeCards := []Card{
-		Card{Suit: "Hearts", Rank: "2"},
+func TestFuncOps(t *testing.T) {
+	tests := []struct {
+		name string
+		op FuncOp
+		expectedDeckSize int
+		expectedSuits map[string]int
+		expectedRanks map[string]int
+	}{
+		{
+			name: "With the Hanged Man",
+			op: WithTheHangedMan(
+				[]Card{
+					{Suit: "Hearts", Rank: "2"},
+				},
+			),
+			expectedDeckSize: 51,
+			expectedSuits: map[string]int {
+				"Hearts": 12,
+				"Spades": 13,
+				"Diamonds": 13,
+				"Clubs": 13,
+			},
+			expectedRanks: map[string]int {
+				"2": 3,
+				"3": 4,
+				"4": 4,
+				"5": 4,
+				"6": 4,
+				"7": 4,
+				"8": 4,
+				"9": 4,
+				"10": 4,
+				"J": 4,
+				"Q": 4,
+				"K": 4,
+				"A": 4,
+			},
+		},
+		{
+			name: "With The Sun",
+			op: WithTheSun(
+				[]Card{
+					{Suit: "Clubs", Rank: "2"},
+					{Suit: "Clubs", Rank: "3"},
+					{Suit: "Clubs", Rank: "4"},
+				},
+			),
+			expectedDeckSize: 52,
+			expectedSuits: map[string]int {
+				"Hearts": 16,
+				"Spades": 13,
+				"Diamonds": 13,
+				"Clubs": 10,
+			},
+			expectedRanks: map[string]int {
+				"2": 4,
+				"3": 4,
+				"4": 4,
+				"5": 4,
+				"6": 4,
+				"7": 4,
+				"8": 4,
+				"9": 4,
+				"10": 4,
+				"J": 4,
+				"Q": 4,
+				"K": 4,
+				"A": 4,
+			},
+		},
+		{
+			name: "With The Star",
+			op: WithTheStar(
+				[]Card{
+					{Suit: "Clubs", Rank: "2"},
+					{Suit: "Clubs", Rank: "3"},
+					{Suit: "Clubs", Rank: "4"},
+				},
+			),
+			expectedDeckSize: 52,
+			expectedSuits: map[string]int {
+				"Hearts": 13,
+				"Spades": 13,
+				"Diamonds": 16,
+				"Clubs": 10,
+			},
+			expectedRanks: map[string]int {
+				"2": 4,
+				"3": 4,
+				"4": 4,
+				"5": 4,
+				"6": 4,
+				"7": 4,
+				"8": 4,
+				"9": 4,
+				"10": 4,
+				"J": 4,
+				"Q": 4,
+				"K": 4,
+				"A": 4,
+			},
+		},
+		{
+			name: "With The Moon",
+			op: WithTheMoon(
+				[]Card{
+					{Suit: "Hearts", Rank: "2"},
+					{Suit: "Hearts", Rank: "3"},
+					{Suit: "Hearts", Rank: "4"},
+				},
+			),
+			expectedDeckSize: 52,
+			expectedSuits: map[string]int {
+				"Hearts": 10,
+				"Spades": 13,
+				"Diamonds": 13,
+				"Clubs": 16,
+			},
+			expectedRanks: map[string]int {
+				"2": 4,
+				"3": 4,
+				"4": 4,
+				"5": 4,
+				"6": 4,
+				"7": 4,
+				"8": 4,
+				"9": 4,
+				"10": 4,
+				"J": 4,
+				"Q": 4,
+				"K": 4,
+				"A": 4,
+			},
+		},
+		{
+			name: "With The World",
+			op: WithTheWorld(
+				[]Card{
+					{Suit: "Hearts", Rank: "2"},
+					{Suit: "Hearts", Rank: "3"},
+					{Suit: "Hearts", Rank: "4"},
+				},
+			),
+			expectedDeckSize: 52,
+			expectedSuits: map[string]int {
+				"Hearts": 10,
+				"Spades": 16,
+				"Diamonds": 13,
+				"Clubs": 13,
+			},
+			expectedRanks: map[string]int {
+				"2": 4,
+				"3": 4,
+				"4": 4,
+				"5": 4,
+				"6": 4,
+				"7": 4,
+				"8": 4,
+				"9": 4,
+				"10": 4,
+				"J": 4,
+				"Q": 4,
+				"K": 4,
+				"A": 4,
+			},
+		},
 	}
-	deck = NewStandardDeck(WithTheHangedMan(removeCards))
-	if len(deck.Cards) != 51 {
-		t.Errorf("Expected deck length of 52, got %d", len(deck.Cards))
-	}
-	clear(suitsCount)
-	clear(ranksCount)
-	expectedSuitsCount := map[string]int {
-		"Hearts": 12,
-		"Spades": 13,
-		"Diamonds": 13,
-		"Clubs": 13,
-	}
-	expectedRanksCount := map[string]int {
-		"2": 3,
-		"3": 4,
-		"4": 4,
-		"5": 4,
-		"6": 4,
-		"7": 4,
-		"8": 4,
-		"9": 4,
-		"10": 4,
-		"J": 4,
-		"Q": 4,
-		"K": 4,
-		"A": 4,
-	}
-	for _, card := range deck.Cards {
-		suitsCount[card.Suit]++
-		ranksCount[card.Rank]++
-	}
-	for _, suit := range Suits {
-		if suitsCount[suit] != expectedSuitsCount[suit] {
-			t.Errorf("Expected 13 cards for suit %s, got %d", suit, suitsCount[suit])
-		}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			suitsCount := make(map[string]int)
+			ranksCount := make(map[string]int)
+
+			deck := NewStandardDeck(test.op)
+
+			for _, card := range deck.Cards {
+				suitsCount[card.Suit]++
+				ranksCount[card.Rank]++
+			}
+
+			if len(deck.Cards) != test.expectedDeckSize {
+				t.Errorf("Expected deck length of %d, got %d", test.expectedDeckSize, len(deck.Cards))
+			}
+
+			for _, suit := range Suits {
+				if suitsCount[suit] != test.expectedSuits[suit] {
+					t.Errorf("Expected %d cards for suit %s, got %d", test.expectedSuits[suit], suit, suitsCount[suit])
+				}
+			}
+
+			for _, rank := range Ranks {
+				if ranksCount[rank] != test.expectedRanks[rank] {
+					t.Errorf("Expected %d cards for rank %s, got %d", test.expectedRanks[rank], rank, ranksCount[rank])
+				}
+			}
+		})
 	}
 
-	for _, rank := range Ranks {
-		if ranksCount[rank] != expectedRanksCount[rank] {
-			t.Errorf("Expected 4 cards for rank %s, got %d", rank, ranksCount[rank])
-		}
-	}
 }
 
 func TestDealHand(t *testing.T) {
